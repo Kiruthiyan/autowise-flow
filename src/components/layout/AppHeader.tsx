@@ -12,13 +12,13 @@ import {
 
 export function AppHeader() {
   return (
-    <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6">
+    <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6 shadow-sm">
       {/* Search */}
       <div className="relative w-96">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           placeholder="Search vehicles, drivers, trips..."
-          className="pl-10 bg-secondary border-0"
+          className="pl-10 bg-muted border-0 h-10"
         />
       </div>
 

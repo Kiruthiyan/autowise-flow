@@ -10,30 +10,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Search, Filter, Eye, Pencil, Car } from "lucide-react";
+import { Plus, Search, Filter, MoreHorizontal } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const vehicles = [
-  { id: "V-001", regNo: "CAB-2345", model: "Toyota Hilux", type: "Van", department: "Engineering", status: "active", image: null },
-  { id: "V-002", regNo: "CAD-5678", model: "Nissan X-Trail", type: "SUV", department: "Admin", status: "repair", image: null },
-  { id: "V-003", regNo: "CAE-9012", model: "Toyota Corolla", type: "Sedan", department: "Science", status: "active", image: null },
-  { id: "V-004", regNo: "CAF-3456", model: "Mitsubishi L200", type: "Pickup", department: "IT", status: "rented", image: null },
-  { id: "V-005", regNo: "CAG-7890", model: "Honda CR-V", type: "Bus", department: "Medical", status: "active", image: null },
-  { id: "V-006", regNo: "CAH-1122", model: "Toyota Hiace", type: "Van", department: "Library", status: "inactive", image: null },
+  { id: "V-001", model: "Toyota Hilux", plate: "WP CAB-1234", type: "Pickup", status: "active", driver: "John Smith", mileage: "45,230 km" },
+  { id: "V-002", model: "Nissan X-Trail", plate: "WP CAD-5678", type: "SUV", status: "maintenance", driver: "Unassigned", mileage: "78,120 km" },
+  { id: "V-003", model: "Toyota Corolla", plate: "WP CAE-9012", type: "Sedan", status: "active", driver: "Sarah Johnson", mileage: "32,450 km" },
+  { id: "V-004", model: "Mitsubishi L200", plate: "WP CAF-3456", type: "Pickup", status: "rented", driver: "External", mileage: "56,780 km" },
+  { id: "V-005", model: "Honda CR-V", plate: "WP CAG-7890", type: "SUV", status: "active", driver: "Mike Brown", mileage: "23,100 km" },
+  { id: "V-006", model: "Toyota Hiace", plate: "WP CAH-1122", type: "Van", status: "inactive", driver: "Unassigned", mileage: "120,450 km" },
 ];
 
-const getStatusBadge = (status: string) => {
-  switch (status) {
-    case "active":
-      return <Badge variant="success">Active</Badge>;
-    case "repair":
-      return <Badge variant="destructive">Repair</Badge>;
-    case "rented":
-      return <Badge variant="warning">Rented</Badge>;
-    case "inactive":
-      return <Badge variant="secondary">Inactive</Badge>;
-    default:
-      return <Badge variant="outline">{status}</Badge>;
-  }
+const statusColors: Record<string, string> = {
+  active: "bg-success text-success-foreground",
+  maintenance: "bg-warning text-warning-foreground",
+  rented: "bg-primary text-primary-foreground",
+  inactive: "bg-muted text-muted-foreground",
 };
 
 const Vehicles = () => {
@@ -43,12 +41,12 @@ const Vehicles = () => {
         {/* Page Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-primary">Vehicles</h1>
-            <p className="text-muted-foreground text-sm">Manage your fleet vehicles</p>
+            <h1 className="text-2xl font-bold">Vehicles</h1>
+            <p className="text-muted-foreground">Manage your fleet vehicles</p>
           </div>
-          <Button>
+          <Button className="bg-primary hover:bg-primary/90">
             <Plus className="w-4 h-4 mr-2" />
-            Add New Vehicle
+            Add Vehicle
           </Button>
         </div>
 
@@ -65,39 +63,50 @@ const Vehicles = () => {
         </div>
 
         {/* Table */}
-        <div className="bg-card rounded-xl border border-border overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.05)]">
+        <div className="bg-card rounded-xl border border-border overflow-hidden">
           <Table>
             <TableHeader>
-              <TableRow className="bg-muted/50">
-                <TableHead className="font-semibold text-foreground">Vehicle No</TableHead>
-                <TableHead className="font-semibold text-foreground">Image</TableHead>
-                <TableHead className="font-semibold text-foreground">Type</TableHead>
-                <TableHead className="font-semibold text-foreground">Department</TableHead>
-                <TableHead className="font-semibold text-foreground">Status</TableHead>
-                <TableHead className="font-semibold text-foreground text-center">Action</TableHead>
+              <TableRow>
+                <TableHead>Vehicle ID</TableHead>
+                <TableHead>Model</TableHead>
+                <TableHead>Plate Number</TableHead>
+                <TableHead>Type</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Assigned Driver</TableHead>
+                <TableHead>Mileage</TableHead>
+                <TableHead className="w-12"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {vehicles.map((vehicle) => (
-                <TableRow key={vehicle.id} className="hover:bg-muted/30">
-                  <TableCell className="font-medium text-foreground">{vehicle.regNo}</TableCell>
+                <TableRow key={vehicle.id} className="hover:bg-muted/50">
+                  <TableCell className="font-medium">{vehicle.id}</TableCell>
+                  <TableCell>{vehicle.model}</TableCell>
+                  <TableCell>{vehicle.plate}</TableCell>
+                  <TableCell>{vehicle.type}</TableCell>
                   <TableCell>
-                    <div className="w-12 h-10 rounded bg-muted flex items-center justify-center">
-                      <Car className="w-5 h-5 text-muted-foreground" />
-                    </div>
+                    <Badge className={statusColors[vehicle.status]}>
+                      {vehicle.status}
+                    </Badge>
                   </TableCell>
-                  <TableCell className="text-muted-foreground">{vehicle.type}</TableCell>
-                  <TableCell className="text-muted-foreground">{vehicle.department}</TableCell>
-                  <TableCell>{getStatusBadge(vehicle.status)}</TableCell>
+                  <TableCell>{vehicle.driver}</TableCell>
+                  <TableCell>{vehicle.mileage}</TableCell>
                   <TableCell>
-                    <div className="flex items-center justify-center gap-2">
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <Eye className="w-4 h-4 text-muted-foreground hover:text-primary" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <Pencil className="w-4 h-4 text-muted-foreground hover:text-primary" />
-                      </Button>
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>View Details</DropdownMenuItem>
+                        <DropdownMenuItem>Edit</DropdownMenuItem>
+                        <DropdownMenuItem>Maintenance History</DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">
+                          Deactivate
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}

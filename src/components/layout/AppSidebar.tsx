@@ -30,20 +30,20 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        "bg-sidebar text-sidebar-foreground h-screen flex flex-col transition-all duration-300",
-        collapsed ? "w-16" : "w-[260px]"
+        "bg-sidebar text-sidebar-foreground h-screen flex flex-col transition-all duration-300 border-r border-sidebar-border",
+        collapsed ? "w-16" : "w-64"
       )}
     >
       {/* Logo */}
       <div className="h-16 flex items-center px-4 border-b border-sidebar-border">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center">
-            <Truck className="w-6 h-6 text-secondary-foreground" />
+          <div className="w-10 h-10 rounded-lg bg-sidebar-primary flex items-center justify-center">
+            <Truck className="w-6 h-6 text-sidebar-primary-foreground" />
           </div>
           {!collapsed && (
             <div className="animate-fade-in">
-              <h1 className="font-bold text-sidebar-foreground">VFMS</h1>
-              <p className="text-xs text-sidebar-foreground/60">University of Moratuwa</p>
+              <h1 className="font-bold text-sidebar-primary-foreground">FleetPro</h1>
+              <p className="text-xs text-sidebar-foreground/60">Management System</p>
             </div>
           )}
         </div>
@@ -58,13 +58,13 @@ export function AppSidebar() {
                 to={item.url}
                 end={item.url === "/"}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors",
                   collapsed && "justify-center"
                 )}
-                activeClassName="bg-sidebar-accent text-sidebar-foreground border-l-4 border-secondary"
+                activeClassName="bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary hover:text-sidebar-primary-foreground"
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
-                {!collapsed && <span className="animate-fade-in text-sm">{item.title}</span>}
+                {!collapsed && <span className="animate-fade-in">{item.title}</span>}
               </NavLink>
             </li>
           ))}
